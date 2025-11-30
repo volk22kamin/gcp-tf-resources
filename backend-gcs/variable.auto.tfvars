@@ -6,5 +6,10 @@ buckets = {
     bucket_name_prefix = "vm-state"
     environment        = "prod"
     location           = "us-east1"
+  } 
+  fw = {
+    bucket_name_prefix = "fw-state"
+    environment        = "prod"
+    location           = "us-east1"
   }
 }
