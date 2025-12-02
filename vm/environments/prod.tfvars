@@ -15,15 +15,15 @@ common_labels = {
 # VM Instances Configuration
 vm_instances = {
   "n8n-server" = {
-    machine_type    = "e2-micro" 
+    machine_type    = "e2-micro"
     description     = "n8n automation server"
     boot_disk_image = "ubuntu-os-cloud/ubuntu-2204-lts"
-    boot_disk_size  = 30            
-    boot_disk_type  = "pd-standard" 
+    boot_disk_size  = 30
+    boot_disk_type  = "pd-standard"
 
     assign_external_ip = true
 
-    network_tags = ["http-server", "https-server", "ssh"]
+    network_tags = ["http-server", "https-server", "ssh", "n8n-server"]
 
     startup_script = <<-EOF
       #!/bin/bash
