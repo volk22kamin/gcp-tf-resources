@@ -1,10 +1,10 @@
 module "firewall" {
   source   = "./modules/firewall"
-  for_each = var.firewall_rules
+  for_each = local.firewall_rules_with_full_paths
 
   name        = each.key
   description = try(each.value.description, null)
-  network     = var.network
+  network     = each.value.network
   project_id  = var.project_id
 
   allow_rules = try(each.value.allow_rules, [])

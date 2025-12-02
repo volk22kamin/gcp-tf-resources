@@ -9,11 +9,12 @@ terraform {
   }
 
   backend "gcs" {
-    bucket = "fw-state-273385931402"
-    prefix = "firewall/terraform.tfstate"
+    bucket = "gke-state-273385931402" # To be configured
+    prefix = "gke-cluster/terraform.tfstate"
   }
 }
 
 provider "google" {
   project = var.project_id
+  region  = var.gcp_region
 }

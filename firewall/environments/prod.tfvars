@@ -1,4 +1,4 @@
-project_id = "training-472512"
+project_id = "terraform-480008"
 network    = "default"
 
 firewall_rules = {
@@ -12,8 +12,8 @@ firewall_rules = {
       "35.191.0.0/16",
       "35.235.240.0/20"
     ]
-    priority      = 100
-    description   = "Allow SSH from GCP Console"
+    priority    = 100
+    description = "Allow SSH from GCP Console"
   }
   "allow-cloudflare-ipv4" = {
     allow_rules = [{
@@ -37,9 +37,9 @@ firewall_rules = {
       "197.234.240.0/22",
       "198.41.128.0/17",
     ]
-    priority      = 998
-    description   = "Allow HTTP and HTTPS from Cloudflare IPv4"
-    target_tags   = ["n8n-server"]
+    priority    = 998
+    description = "Allow HTTP and HTTPS from Cloudflare IPv4"
+    target_tags = ["n8n-server"]
   }
 
   "allow-cloudflare-ipv6" = {
@@ -56,9 +56,9 @@ firewall_rules = {
       "2a06:98c0::/29",
       "2c0f:f248::/32",
     ]
-    priority      = 998
-    description   = "Allow HTTP and HTTPS from Cloudflare IPv6"
-    target_tags   = ["n8n-server"]
+    priority    = 998
+    description = "Allow HTTP and HTTPS from Cloudflare IPv6"
+    target_tags = ["n8n-server"]
   }
 
   "deny-all-from-internet" = {
@@ -69,9 +69,9 @@ firewall_rules = {
     source_ranges = [
       "0.0.0.0/0"
     ]
-    priority      = 999
-    description   = "Deny all remaining ingress from the internet to n8n"
-    target_tags   = ["n8n-server"]
+    priority    = 999
+    description = "Deny all remaining ingress from the internet to n8n"
+    target_tags = ["n8n-server"]
   }
   "deny-all-from-internet-ipv6" = {
     deny_rules = [{
@@ -81,8 +81,21 @@ firewall_rules = {
     source_ranges = [
       "::/0",
     ]
-    priority      = 999
-    description   = "Deny all remaining ingress from the internet to n8n over IPv6"
-    target_tags   = ["n8n-server"]
+    priority    = 999
+    description = "Deny all remaining ingress from the internet to n8n over IPv6"
+    target_tags = ["n8n-server"]
+  }
+  "allow-tcp-32000" = {
+    network = "k8s-network"
+    allow_rules = [{
+      protocol = "tcp"
+      ports    = ["32000"]
+    }]
+    source_ranges = [
+      "0.0.0.0/0"
+    ]
+    priority    = 1000
+    description = "Allow TCP on port 32000"
+    target_tags = ["k8s-node"]
   }
 }

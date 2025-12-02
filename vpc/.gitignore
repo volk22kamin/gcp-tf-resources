@@ -12,6 +12,7 @@ crash.*.log
 *.tfplan
 
 # Variable files (often contain secrets)
+*.tfvars
 *.tfvars.json
 *.auto.tfvars
 *.auto.tfvars.json

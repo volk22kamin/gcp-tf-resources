@@ -4,13 +4,15 @@ variable "project_id" {
 }
 
 variable "network" {
-  description = "The network this rule applies to"
+  description = "Default network for firewall rules (can be overridden per rule)"
   type        = string
+  default     = null
 }
 
 variable "firewall_rules" {
   description = "Map of firewall rules"
   type = map(object({
+    network     = optional(string)
     description = optional(string)
     allow_rules = optional(list(object({
       protocol = string
