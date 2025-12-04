@@ -59,9 +59,21 @@ gke_clusters = {
         }
         tags = ["gke-node", "default-pool"]
       }
+      "db-pool" = {
+        machine_type       = "e2-standard-4"
+        min_count          = 2
+        max_count          = 2
+        initial_node_count = 2
+        node_locations     = ["us-central1-b"]
+        disk_size_gb       = 30
+        preemptible        = false
+        labels = {
+          pool = "db"
+        }
+        tags = ["gke-node", "db-pool"]
+      }
     }
 
     deletion_protection = false  # Set to true for production
   }
 }
-

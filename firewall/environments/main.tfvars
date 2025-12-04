@@ -6,7 +6,7 @@ firewall_rules = {
     network = "main-k8s-vpc"
     allow_rules = [{
       protocol = "tcp"
-      ports    = ["32000"]
+      ports    = ["32000", "32001", "30829"]
     }]
     source_ranges = [
       "0.0.0.0/0"
