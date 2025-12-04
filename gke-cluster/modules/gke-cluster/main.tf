@@ -1,27 +1,3 @@
-locals {
-  node_pools = {
-    for cluster_key, cluster in var.gke_clusters : cluster_key => {
-      for pool_name, pool_config in cluster.node_pools :
-      pool_name => {
-        machine_type       = pool_config.machine_type
-        min_count          = pool_config.min_count
-        max_count          = pool_config.max_count
-        initial_node_count = coalesce(pool_config.initial_node_count, pool_config.min_count)
-        disk_size_gb       = pool_config.disk_size_gb != null ? pool_config.disk_size_gb : var.default_disk_size_gb
-        disk_type          = pool_config.disk_type != null ? pool_config.disk_type : var.default_disk_type
-        preemptible        = pool_config.preemptible != null ? pool_config.preemptible : var.default_preemptible
-        service_account    = pool_config.service_account != null ? pool_config.service_account : var.default_service_account
-        labels             = merge(var.default_labels, pool_config.labels != null ? pool_config.labels : {})
-        tags               = distinct(concat(var.default_tags, pool_config.tags != null ? pool_config.tags : []))
-        metadata           = merge(var.default_metadata, pool_config.metadata != null ? pool_config.metadata : {})
-        oauth_scopes       = pool_config.oauth_scopes != null ? pool_config.oauth_scopes : var.default_oauth_scopes
-        node_locations     = pool_config.node_locations != null ? pool_config.node_locations : []
-        auto_upgrade       = pool_config.auto_upgrade != null ? pool_config.auto_upgrade : var.default_auto_upgrade
-        auto_repair        = pool_config.auto_repair != null ? pool_config.auto_repair : var.default_auto_repair
-      }
-    }
-  }
-}
 
 resource "google_container_cluster" "cluster" {
   project  = var.project_id
@@ -96,24 +72,24 @@ resource "google_container_node_pool" "pools" {
   name     = each.key
 
   initial_node_count = each.value.initial_node_count
-  node_locations     = each.value.node_locations != null && length(each.value.node_locations) > 0 ? each.value.node_locations : null
+  node_locations     = try(length(each.value.node_locations), 0) > 0 ? each.value.node_locations : null
 
   node_config {
     machine_type    = each.value.machine_type
-    disk_size_gb    = each.value.disk_size_gb
-    disk_type       = each.value.disk_type
-    preemptible     = each.value.preemptible
-    service_account = each.value.service_account
-    oauth_scopes    = each.value.oauth_scopes
+    disk_size_gb    = coalesce(each.value.disk_size_gb, var.default_disk_size_gb)
+    disk_type       = coalesce(each.value.disk_type, var.default_disk_type)
+    preemptible     = coalesce(each.value.preemptible, var.default_preemptible)
+    service_account = each.value.service_account != null ? each.value.service_account : var.default_service_account
+    oauth_scopes    = coalesce(each.value.oauth_scopes, var.default_oauth_scopes)
 
-    labels   = each.value.labels != null && length(each.value.labels) > 0 ? each.value.labels : null
-    tags     = each.value.tags != null && length(each.value.tags) > 0 ? each.value.tags : null
-    metadata = each.value.metadata != null && length(each.value.metadata) > 0 ? each.value.metadata : null
+    labels   = each.value.labels != null ? each.value.labels : var.default_labels
+    tags     = each.value.tags != null ? each.value.tags : var.default_tags
+    metadata = each.value.metadata != null ? each.value.metadata : var.default_metadata
   }
 
   management {
-    auto_upgrade = each.value.auto_upgrade
-    auto_repair  = each.value.auto_repair
+    auto_upgrade = coalesce(each.value.auto_upgrade, var.default_auto_upgrade)
+    auto_repair  = coalesce(each.value.auto_repair, var.default_auto_repair)
   }
 
   autoscaling {
