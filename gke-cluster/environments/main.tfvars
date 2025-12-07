@@ -67,6 +67,13 @@ gke_clusters = {
         node_locations     = ["us-central1-b"]
         disk_size_gb       = 30
         preemptible        = false
+        node_taints = [
+          {
+            key    = "dedicated"
+            value  = "db"
+            effect = "NO_SCHEDULE"
+          }
+        ]
         labels = {
           pool = "db"
         }
@@ -80,6 +87,13 @@ gke_clusters = {
         node_locations     = ["us-central1-c"]
         disk_size_gb       = 30
         preemptible        = false
+        node_taints = [
+          {
+            key    = "dedicated"
+            value  = "db"
+            effect = "NO_SCHEDULE"
+          }
+        ]
         labels = {
           pool = "db"
         }
@@ -93,6 +107,13 @@ gke_clusters = {
         node_locations     = ["us-central1-a"]
         disk_size_gb       = 30
         preemptible        = false
+        node_taints = [
+          {
+            key    = "dedicated"
+            value  = "db"
+            effect = "NO_SCHEDULE"
+          }
+        ]
         labels = {
           pool = "db"
         }

@@ -85,6 +85,15 @@ resource "google_container_node_pool" "pools" {
     labels   = each.value.labels != null ? each.value.labels : var.default_labels
     tags     = each.value.tags != null ? each.value.tags : var.default_tags
     metadata = each.value.metadata != null ? each.value.metadata : var.default_metadata
+
+    dynamic "taint" {
+      for_each = try(length(each.value.node_taints), 0) > 0 ? each.value.node_taints : []
+      content {
+        key    = taint.value.key
+        value  = taint.value.value
+        effect = taint.value.effect
+      }
+    }
   }
 
   management {

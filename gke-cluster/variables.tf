@@ -83,6 +83,11 @@ variable "gke_clusters" {
       metadata           = optional(map(string))
       oauth_scopes       = optional(list(string))
       node_locations     = optional(list(string))
+      node_taints        = optional(list(object({
+        key    = string
+        value  = string
+        effect = string
+      })))
       auto_upgrade       = optional(bool)
       auto_repair        = optional(bool)
     }))
@@ -90,4 +95,16 @@ variable "gke_clusters" {
     deletion_protection = optional(bool, true)
   }))
   default = {}
+
+  validation {
+    condition = alltrue([
+      for cluster in values(var.gke_clusters) : alltrue([
+        for pool in values(cluster.node_pools) : alltrue([
+          for t in (pool.node_taints != null ? pool.node_taints : []) :
+          contains(["NO_SCHEDULE", "PREFER_NO_SCHEDULE", "NO_EXECUTE"], t.effect)
+        ])
+      ])
+    ])
+    error_message = "node_taints.effect must be one of: NO_SCHEDULE, PREFER_NO_SCHEDULE, NO_EXECUTE."
+  }
 }
