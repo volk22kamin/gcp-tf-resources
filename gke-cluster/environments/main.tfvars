@@ -59,18 +59,44 @@ gke_clusters = {
         }
         tags = ["gke-node", "default-pool"]
       }
-      "db-pool" = {
+      "db-pool-zone-b" = {
         machine_type       = "e2-standard-4"
-        min_count          = 2
-        max_count          = 2
-        initial_node_count = 2
+        min_count          = 1
+        max_count          = 1
+        initial_node_count = 1
         node_locations     = ["us-central1-b"]
         disk_size_gb       = 30
         preemptible        = false
         labels = {
           pool = "db"
         }
-        tags = ["gke-node", "db-pool"]
+        tags = ["gke-node", "db-pool-zone-b"]
+      }
+      "db-pool-zone-c" = {
+        machine_type       = "e2-standard-4"
+        min_count          = 1
+        max_count          = 1
+        initial_node_count = 1
+        node_locations     = ["us-central1-c"]
+        disk_size_gb       = 30
+        preemptible        = false
+        labels = {
+          pool = "db"
+        }
+        tags = ["gke-node", "db-pool-zone-c"]
+      }
+      "db-pool-zone-a" = {
+        machine_type       = "e2-medium"
+        min_count          = 1
+        max_count          = 1
+        initial_node_count = 1
+        node_locations     = ["us-central1-a"]
+        disk_size_gb       = 30
+        preemptible        = false
+        labels = {
+          pool = "db"
+        }
+        tags = ["gke-node", "db-pool-zone-a"]
       }
     }
 
